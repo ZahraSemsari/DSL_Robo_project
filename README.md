@@ -1,6 +1,6 @@
 # DSL_Robo_project
 
-````md
+```md
 # Robot DSL Compiler (ANTLR4 + Python)
 
 This project implements a small domain-specific language (DSL) for describing robot behavior using a Finite State Machine (FSM).  
@@ -38,7 +38,7 @@ robot-dsl/
   examples/
     TempBot.dsl               # sample DSL program
   generated_robot.py          # output (created by codegen)
-````
+```
 
 ---
 
@@ -199,5 +199,3 @@ Get-Content .\examples\TempBot.dsl
 
 
 
-```
-```
