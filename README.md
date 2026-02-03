@@ -1,4 +1,3 @@
-
 ```md
 # DSL_Robo_project
 
@@ -11,19 +10,16 @@ A DSL script is parsed with **ANTLR4**, converted into an **Abstract Syntax Tree
 and then translated into **executable Python code**.
 
 ---
-
 ## Pipeline
 
-```
-
-DSL file
-↓
-ANTLR Parse Tree
-↓
-AST (Abstract Syntax Tree)
-↓
-Python Code Generation
-↓
+DSL file  
+↓  
+ANTLR Parse Tree  
+↓  
+AST (Abstract Syntax Tree)  
+↓  
+Python Code Generation  
+↓  
 Executable Robot Controller (FSM)
 
 ````
