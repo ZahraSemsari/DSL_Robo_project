@@ -9,7 +9,6 @@ robot behaviors using a **Finite State Machine (FSM)** model.
 A DSL script is parsed with **ANTLR4**, converted into an **Abstract Syntax Tree (AST)**,
 and then translated into **executable Python code**.
 
----
 ## Pipeline
 
 DSL file  
