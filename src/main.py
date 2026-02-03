@@ -10,7 +10,7 @@ from src.generated.RobotDSLParser import RobotDSLParser
 from src.ast_builder_listener import build_ast
 from src.codegen_python import generate_python
 
-# اگر semantic را نگه می‌داری:
+
 from src.semantic import analyze
 
 

@@ -52,15 +52,20 @@ def emit_block(block: Optional[Block], indent: str) -> List[str]:
     for st in block.statements:
         if isinstance(st, AssignStmt):
             lines.append(f"{indent}vars[{_py(st.name)}] = {emit_expr(st.value)}")
+        # vars['target'] = (get_value('target') + 1)
 
         elif isinstance(st, ActionStmt):
             args = ", ".join(emit_expr(a) for a in st.args)
             lines.append(f"{indent}actuators[{_py(st.actuator)}].{st.method}({args})")
+        # actuators['heater'].on()
 
         elif isinstance(st, TransitionStmt):
             cond = emit_expr(st.cond)
             lines.append(f"{indent}if {cond}:")
             lines.append(f"{indent}    return {_py(st.target_state)}")
+
+        # if (get_value('temperature') < get_value('target')):
+        #     return 'Heating'
 
         else:
             raise TypeError(f"Unknown Stmt: {type(st)}")
@@ -119,14 +124,10 @@ def generate_python(program: Program, behavior_name: Optional[str] = None) -> st
         "    vars: Dict[str, Any] = {}",
     ]
 
-    # init vars (اگر init Expr دارد، برای سادگی اینجا None می‌ذاریم و در runtime واقعی می‌تونیم init کنیم)
-    # چون emit_expr نیاز به get_value دارد؛ برای init های ساده هم کار می‌کند، اما اگر init به sensor وابسته باشد، بهتر است در زمان اجرا انجام شود.
     for v in robot.vars:
         if v.init is None:
             out.append(f"    vars[{_py(v.name)}] = None")
         else:
-            # init با literal ها/expr هم تولید می‌شود (get_value را در run داریم)
-            # اینجا safe: بعداً در run_demo مقداردهی می‌کنیم
             out.append(f"    vars[{_py(v.name)}] = None  # init in run()")
     out += [
         "    return vars",
@@ -160,6 +161,15 @@ def generate_python(program: Program, behavior_name: Optional[str] = None) -> st
         out += ["    vars = ctx.vars", "    actuators = ctx.actuators", "    get_value = get_value_factory(ctx)"]
         out += emit_block(st.exit_on, indent="    ")
         out += [""]
+
+    # def update_Idle(ctx):
+    #     vars = ctx.vars
+    #     actuators = ctx.actuators
+    #     get_value = get_value_factory(ctx)
+    #
+    #     if (get_value('temperature') < get_value('target')):
+    #         return 'Heating'
+    #     return None
 
     out += [
         "ENTER: Dict[str, Callable[[Ctx], None]] = {",
@@ -197,7 +207,6 @@ def generate_python(program: Program, behavior_name: Optional[str] = None) -> st
         "    # init vars using DSL init expressions (if any):",
     ]
 
-    # init vars now that get_value exists
     for v in robot.vars:
         if v.init is not None:
             out.append(f"    ctx.vars[{_py(v.name)}] = {emit_expr(v.init)}")
