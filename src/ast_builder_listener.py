@@ -16,14 +16,11 @@ from src.generated.RobotDSLListener import RobotDSLListener
 
 
 def _span(ctx) -> Span:
-    # ctx.start موجود است
+
     return Span(line=ctx.start.line, col=ctx.start.column)
 
 
 class ASTBuilderListener(RobotDSLListener):
-    """
-    Build AST using ctx->node map.
-    """
 
     def __init__(self) -> None:
         self.node: Dict[Any, Any] = {}
@@ -36,7 +33,6 @@ class ASTBuilderListener(RobotDSLListener):
 
         self._behavior_initial: Optional[str] = None
 
-    # ---------- program / robot ----------
 
     def exitProgram(self, ctx: RobotDSLParser.ProgramContext):
         robot = self.node[ctx.robotDecl()]
@@ -144,7 +140,7 @@ class ASTBuilderListener(RobotDSLListener):
             self.node[ctx] = self.node[ctx.assignStmt()]
         elif ctx.actionStmt():
             self.node[ctx] = self.node[ctx.actionStmt()]
-        # else: SEMI تنها => ignore
+
 
     def exitTransitionStmt(self, ctx: RobotDSLParser.TransitionStmtContext):
         self.node[ctx] = TransitionStmt(
@@ -203,7 +199,6 @@ class ASTBuilderListener(RobotDSLListener):
             self.node[ctx] = UnaryExpr(op=op, right=right, span=_span(ctx))
 
     def _fold(self, ctx, term_ctxs: List[Any]):
-        # ctx children look like: term op term op term ...
         if len(term_ctxs) == 1:
             self.node[ctx] = self.node[term_ctxs[0]]
             return

@@ -45,7 +45,6 @@ class SemanticAnalyzer:
 
         return self.errors
 
-    # ---------- collection ----------
 
     def _collect_decls(self, r: RobotDecl) -> None:
         # sensors
@@ -78,7 +77,7 @@ class SemanticAnalyzer:
                         v.span
                     )
 
-    # ---------- behavior/state checks ----------
+
 
     def _check_behavior(self, b: BehaviorDecl) -> None:
         state_map: Dict[str, StateDecl] = {}
@@ -133,7 +132,6 @@ class SemanticAnalyzer:
             else:
                 self.error(f"Unknown statement node: {type(s)}", getattr(s, "span", None))
 
-    # ---------- type inference ----------
 
     def _infer_expr_type(self, e: Expr) -> Optional[str]:
         if isinstance(e, LiteralExpr):
@@ -188,7 +186,6 @@ class SemanticAnalyzer:
                 return "bool"
 
             if op in ("==", "!="):
-                # allow same type; also allow int/float mix
                 if lt == rt:
                     return "bool"
                 if {lt, rt} <= {"int", "float"}:
@@ -222,7 +219,6 @@ class SemanticAnalyzer:
     def _assignable(self, to_t: str, from_t: str) -> bool:
         if to_t == from_t:
             return True
-        # allow int -> float
         if to_t == "float" and from_t == "int":
             return True
         return False
