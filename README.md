@@ -1,4 +1,4 @@
-````md
+```md
 # DSL_Robo_project
 
 ## Robot DSL Compiler (ANTLR4 + Python)
@@ -20,7 +20,6 @@ AST (Abstract Syntax Tree)
 Python Code Generation  
 ↓  
 Executable Robot Controller (FSM)
-````
 
 The final output is a standalone Python program (`generated_robot.py`) that simulates
 the robot behavior.
@@ -47,89 +46,82 @@ in robotics and embedded systems.
 Using this DSL, a robot can:
 
 ### 1) Read Sensors (Inputs)
+
 Sensors represent data coming from the environment.
 
 Example:
+
 ```dsl
 sensor temperature: float;
 sensor distance: float;
-````
-
 Typical use cases:
 
-* Temperature sensors
-* Distance / ultrasonic sensors
-* Buttons
-* Light sensors
-* Battery level sensors
+Temperature sensors
 
-Sensors are **read-only** and are provided at runtime.
+Distance / ultrasonic sensors
 
----
+Buttons
 
-### 2) Store Internal State (Variables)
+Light sensors
 
+Battery level sensors
+
+Sensors are read-only and are provided at runtime.
+
+2) Store Internal State (Variables)
 Variables represent the robot’s internal memory.
 
 Example:
 
-```dsl
 var target: float = 30.0;
 var speed: int = 100;
-```
-
 Variables:
 
-* Can be initialized
-* Can be updated during execution
-* Are used in conditions and calculations
+Can be initialized
 
----
+Can be updated during execution
 
-### 3) Control Actuators (Outputs)
+Are used in conditions and calculations
 
+3) Control Actuators (Outputs)
 Actuators represent things the robot can control.
 
 Example:
 
-```dsl
 actuator heater: Heater;
 actuator motor: Motor;
-```
-
 Inside behaviors:
 
-```dsl
 heater.on();
 motor.setSpeed(100);
-```
-
 Typical actuators:
 
-* Motors
-* LEDs
-* Heaters
-* Servos
-* Buzzers
+Motors
 
-In this project, actuators are **simulated** and print actions to the console,
+LEDs
+
+Heaters
+
+Servos
+
+Buzzers
+
+In this project, actuators are simulated and print actions to the console,
 but they can easily be connected to real hardware.
 
----
-
-### 4) Define Behavior Using States
-
-Robot behavior is defined using **states**.
+4) Define Behavior Using States
+Robot behavior is defined using states.
 
 Each state can have:
 
-* `enter_on`  → runs once when entering the state
-* `update_on` → runs every tick
-* `exit_on`   → runs once when leaving the state
+enter_on → runs once when entering the state
+
+update_on → runs every tick
+
+exit_on → runs once when leaving the state
 
 Example:
 
-```dsl
 state Heating {
   enter_on {
     heater.on();
@@ -141,46 +133,38 @@ state Heating {
     heater.off();
   }
 }
-```
-
----
-
-### 5) Transition Between States
-
+5) Transition Between States
 Transitions are defined using conditions:
 
-```dsl
 if (temperature < target) goto Heating;
-```
-
 This allows the robot to:
 
-* React to sensor values
-* Change behavior dynamically
-* Implement decision logic
+React to sensor values
 
----
+Change behavior dynamically
 
-## Example Robot Behavior
+Implement decision logic
 
+Example Robot Behavior
 A simple temperature controller:
 
-* If temperature is below target → turn heater ON
-* If temperature reaches target → turn heater OFF
+If temperature is below target → turn heater ON
+
+If temperature reaches target → turn heater OFF
 
 This same DSL can be used for:
 
-* Obstacle avoidance robots
-* Line follower robots
-* Automatic doors
-* Traffic light controllers
-* Smart home automation logic
+Obstacle avoidance robots
 
----
+Line follower robots
 
-## Project Structure
+Automatic doors
 
-```
+Traffic light controllers
+
+Smart home automation logic
+
+Project Structure
 DSL_Robo_project/
   grammar/
     RobotDSL.g4              # ANTLR grammar
@@ -193,44 +177,22 @@ DSL_Robo_project/
     main.py                  # CLI entry point
   examples/
     TempBot.dsl              # Example DSL program
-```
-
----
-
-## Command-Line Usage
-
-### Print AST
-
-```bash
+Command-Line Usage
+Print AST
 python -m src.main examples/TempBot.dsl ast
-```
-
-### Semantic Check
-
-```bash
+Semantic Check
 python -m src.main examples/TempBot.dsl check
-```
-
-### Generate Python Code
-
-```bash
+Generate Python Code
 python -m src.main examples/TempBot.dsl genpy --out generated_robot.py
-```
-
-### Run Generated Code
-
-```bash
+Run Generated Code
 python generated_robot.py
-```
+Design Goals
+Clear separation between syntax, semantics, and execution
 
----
+Readable and simple DSL
 
-## Design Goals
+FSM-based behavior modeling
 
-* Clear separation between **syntax**, **semantics**, and **execution**
-* Readable and simple DSL
-* FSM-based behavior modeling
-* Executable code generation instead of interpretation
-* Easy extension for real robotics projects
+Executable code generation instead of interpretation
 
----
+Easy extension for real robotics projects
